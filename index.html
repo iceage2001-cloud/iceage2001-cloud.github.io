@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indian Salary Slip Generator – Free Online Tool | PF ESI TDS Auto Calculator</title>
+  <meta name="description" content="Free Indian salary slip generator online. Generate professional salary slips with PF, ESI, HRA, DA, TDS deductions auto-calculated. Download as PDF instantly. No signup required." />
+  <meta name="keywords" content="salary slip generator India, payslip generator, PF ESI TDS calculator, Indian salary calculator, salary slip PDF download, HRA calculator, income tax calculator India, free payslip online" />
+  <meta name="author" content="Indian Salary Slip Generator" />
+  <meta property="og:title" content="Indian Salary Slip Generator – Free Online Tool" />
+  <meta property="og:description" content="Generate professional Indian salary slips with PF, ESI, HRA, TDS auto-calculated. Free, instant PDF download." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://iceage2001-cloud.github.io/salary-slip-generator/" />
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5972873196464435" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', 'Roboto', Arial, sans-serif; background: #f1f5f9; color: #1e293b; font-size: 15px; line-height: 1.5; }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #1e40af 100%);
+      color: #fff;
+      padding: 28px 24px 22px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; top: -60%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 60%);
+      animation: hdrShimmer 10s ease-in-out infinite;
+    }
+    @keyframes hdrShimmer { 0%,100% { transform: translate(0,0); } 50% { transform: translate(8%,6%); } }
+    header h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px; position: relative; }
+    header p { font-size: 0.84rem; opacity: 0.72; margin-top: 6px; position: relative; }
+
+    /* ===== LIVE SUMMARY BAR ===== */
+    .summary-bar {
+      background: #fff;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .summary-inner {
+      max-width: 900px; margin: 0 auto; padding: 0 16px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+    }
+    .summary-item {
+      text-align: center; padding: 8px 10px; border-radius: 10px;
+      background: #f8fafc; border: 1.5px solid #e2e8f0; transition: all 0.3s;
+    }
+    .summary-item.gross  { border-color: #a5f3fc; background: #ecfeff; }
+    .summary-item.deductions { border-color: #fca5a5; background: #fff1f2; }
+    .summary-item.net    { border-color: #6ee7b7; background: #ecfdf5; }
+    .s-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: #64748b; }
+    .s-value { font-size: 1.05rem; font-weight: 800; margin-top: 2px; font-family: 'Courier New', monospace; }
+    .summary-item.gross .s-value { color: #0e7490; }
+    .summary-item.deductions .s-value { color: #dc2626; }
+    .summary-item.net .s-value { color: #059669; }
+
+    /* ===== STEPS INDICATOR ===== */
+    .steps-row {
+      display: flex; justify-content: space-between; align-items: center;
+      background: #fff; border-radius: 12px; padding: 12px 18px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06); margin-bottom: 16px;
+      overflow-x: auto;
+    }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; color: #94a3b8; flex-shrink: 0; }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: #e2e8f0; color: #64748b;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 700; transition: all 0.3s;
+    }
+    .step.active .step-num { background: linear-gradient(135deg,#4f46e5,#7c3aed); color: #fff; box-shadow: 0 2px 8px rgba(79,70,229,0.4); }
+    .step.active { color: #4f46e5; }
+    .step-divider { flex: 1; height: 2px; background: #e2e8f0; margin: 0 4px; min-width: 10px; border-radius: 2px; }
+
+    /* ===== AD PLACEHOLDER (replace with AdSense code) ===== */
+    .ad-banner {
+      background: linear-gradient(90deg, #eef2ff, #f0fdf4);
+      border: 1px dashed #818cf8;
+      text-align: center;
+      padding: 10px;
+      font-size: 0.75rem;
+      color: #6366f1;
+      margin: 10px auto;
+      max-width: 900px;
+      border-radius: 8px;
+    }
+
+    /* ===== LAYOUT ===== */
+    .container { max-width: 900px; margin: 0 auto; padding: 16px; }
+
+    /* ===== CARD ===== */
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.03);
+      padding: 22px 26px;
+      margin-bottom: 16px;
+      border: 1px solid #f1f5f9;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .card:hover { box-shadow: 0 6px 24px rgba(79,70,229,0.10); transform: translateY(-1px); }
+    .card h2 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #4f46e5;
+      border-left: 3px solid #4f46e5;
+      padding-left: 10px;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ===== FORM GRID ===== */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; }
+    @media(max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-size: 0.72rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input, .form-group select {
+      padding: 10px 13px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      background: #f8fafc;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      width: 100%;
+      color: #1e293b;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #4f46e5;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+    }
+    .field-error { border-color: #ef4444 !important; background: #fff5f5 !important; }
+    .field-error-msg { color: #ef4444; font-size: 0.72rem; margin-top: 2px; font-weight: 500; }
+
+    /* ===== SALARY TABLE IN FORM ===== */
+    .salary-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+    .salary-table th {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 10px 14px;
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .salary-table th:first-child { border-radius: 6px 0 0 0; }
+    .salary-table th:last-child  { border-radius: 0 6px 0 0; }
+    .salary-table td { padding: 7px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .salary-table td label { font-size: 0.87rem; color: #374151; font-weight: 500; }
+    .salary-table tr:hover:not(.total-row) td { background: #f8fafc; }
+    .salary-table td input {
+      padding: 8px 11px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 7px;
+      font-size: 0.9rem;
+      width: 100%;
+      background: #f8fafc;
+      font-family: inherit;
+      color: #1e293b;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .salary-table td input:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); background: #fff; }
+    .salary-table td input[readonly] { background: #f0f4f8; color: #64748b; cursor: not-allowed; font-weight: 600; }
+    .salary-table tr.total-row td { background: #eef2ff; font-weight: 700; font-size: 0.95rem; border-top: 2px solid #c7d2fe; }
+
+    /* ===== CHECKBOX ROW ===== */
+    .check-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; padding: 10px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .check-row label { font-size: 0.83rem; color: #374151; display: flex; align-items: center; gap: 6px; cursor: pointer; margin-right: 12px; font-weight: 500; }
+    .check-row input[type=checkbox] { width: 16px; height: 16px; accent-color: #4f46e5; cursor: pointer; }
+
+    /* ===== TAX REGIME TOGGLE ===== */
+    .regime-toggle { display: flex; gap: 0; border-radius: 10px; overflow: hidden; border: 2px solid #4f46e5; width: fit-content; margin-bottom: 16px; }
+    .regime-btn { padding: 9px 28px; border: none; background: #fff; color: #4f46e5; font-weight: 700; font-size: 0.88rem; cursor: pointer; font-family: inherit; transition: background 0.2s, color 0.2s; }
+    .regime-btn.active { background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; }
+
+    /* ===== INFO BOX ===== */
+    .info-box { background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 8px; padding: 11px 15px; font-size: 0.82rem; color: #166534; margin-bottom: 14px; line-height: 1.65; }
+    .info-box.orange { background: #fff7ed; border-color: #f97316; color: #9a3412; }
+    .info-box.blue { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
+
+    /* ===== DISCLAIMER BOX ===== */
+    .disclaimer { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 14px 18px; font-size: 0.8rem; color: #78350f; line-height: 1.7; margin-top: 8px; }
+    .disclaimer strong { color: #c2410c; }
+
+    /* ===== BUTTONS ===== */
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; justify-content: center; }
+    .btn {
+      padding: 13px 32px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.15s, box-shadow 0.15s;
+      letter-spacing: 0.3px;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; box-shadow: 0 4px 14px rgba(79,70,229,0.35); }
+    .btn-success { background: linear-gradient(135deg, #059669, #10b981); color: #fff; box-shadow: 0 4px 14px rgba(5,150,105,0.35); }
+    .btn-secondary { background: #f1f5f9; color: #4f46e5; border: 1.5px solid #e2e8f0; }
+
+    /* ===== PREVIEW SECTION ===== */
+    #preview-section { display: none; }
+
+    /* ===== SALARY SLIP PREVIEW ===== */
+    #slip {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 30px 36px;
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 12.5px;
+      color: #1e293b;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .slip-header { text-align: center; border-bottom: 2.5px solid #4f46e5; padding-bottom: 14px; margin-bottom: 14px; }
+    .slip-company-name { font-size: 1.35rem; font-weight: 800; color: #1e40af; text-transform: uppercase; letter-spacing: 0.5px; }
+    .slip-company-addr { font-size: 0.75rem; color: #64748b; margin-top: 3px; }
+    .slip-title { font-size: 0.88rem; font-weight: 700; background: linear-gradient(135deg, #1e40af, #4f46e5); color: #fff; text-align: center; padding: 7px; margin: 12px 0; letter-spacing: 2px; border-radius: 4px; text-transform: uppercase; }
+    .slip-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 16px; margin-bottom: 14px; }
+    .slip-info-row { display: flex; gap: 6px; font-size: 0.8rem; padding: 4px 0; border-bottom: 1px dotted #e2e8f0; }
+    .slip-info-row span:first-child { color: #64748b; min-width: 135px; }
+    .slip-info-row span:last-child { font-weight: 700; color: #1e293b; }
+
+    .slip-earn-ded { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; margin-top: 10px; }
+    .slip-col-title { background: linear-gradient(135deg, #1e3a8a, #3730a3); color: #fff; font-weight: 700; font-size: 0.78rem; padding: 7px 12px; text-transform: uppercase; letter-spacing: 0.8px; border-radius: 3px 3px 0 0; }
+    .slip-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 0.8rem; border-bottom: 1px solid #f1f5f9; }
+    .slip-row:nth-child(even) { background: #f8f9fe; }
+    .slip-row-total { display: flex; justify-content: space-between; padding: 8px 12px; font-weight: 700; font-size: 0.86rem; background: #eef2ff; border-top: 2px solid #4f46e5; }
+
+    .slip-net { margin-top: 16px; background: linear-gradient(135deg, #1e40af, #4f46e5); color: #fff; border-radius: 8px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; }
+    .slip-net-label { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+    .slip-net-amount { font-size: 1.4rem; font-weight: 800; }
+
+    .slip-words { font-size: 0.75rem; color: #64748b; margin-top: 8px; font-style: italic; }
+    .slip-footer { margin-top: 22px; display: flex; justify-content: space-between; font-size: 0.73rem; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 12px; }
+    .slip-sign { text-align: center; }
+    .slip-sign-line { border-top: 1px solid #64748b; width: 140px; margin: 26px auto 4px; }
+
+    /* ===== TAX COMPUTATION SUMMARY ===== */
+    .tax-summary-table { width: 100%; border-collapse: collapse; margin-top: 14px; border-radius: 8px; overflow: hidden; }
+    .tax-summary-table td { padding: 7px 14px; font-size: 0.84rem; border-bottom: 1px solid #e2e8f0; }
+    .tax-summary-table td:last-child { text-align: right; font-weight: 600; font-family: 'Courier New', monospace; }
+    .tax-summary-table tr.ts-head td { background: #4f46e5; color: #fff; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+    .tax-summary-table tr.ts-sub td { background: #f8fafc; color: #64748b; padding-left: 22px; }
+    .tax-summary-table tr.ts-sub td:last-child { color: #dc2626; }
+    .tax-summary-table tr.ts-total td { background: #eef2ff; font-weight: 800; font-size: 0.92rem; color: #1e40af; border-top: 2px solid #4f46e5; }
+    .tax-summary-table tr.ts-tax td { background: #fff7ed; color: #9a3412; font-weight: 700; border-top: 2px solid #f97316; }
+    .tax-summary-table tr.ts-net td { background: linear-gradient(90deg,#059669,#10b981); color: #fff; font-weight: 800; font-size: 1rem; }
+    .tax-summary-table tr.ts-rebate td:last-child { color: #059669; font-weight: 700; }
+    .tax-summary-table tr.ts-zero td { background: #f0fdf4; color: #166534; font-weight: 700; text-align: center !important; font-size: 0.9rem; }
+
+    /* ===== AUTO BADGE ===== */
+    .auto-badge { font-size: 0.6rem; background: #dcfce7; color: #166534; border: 1px solid #86efac; border-radius: 4px; padding: 1px 5px; margin-left: 5px; font-weight: 700; letter-spacing: 0.3px; vertical-align: middle; }
+    .calc-info { font-size: 0.73rem; color: #4f46e5; margin-top: 3px; font-style: italic; line-height: 1.5; }
+    .cap-info { font-size: 0.7rem; color: #dc2626; font-weight: 600; margin-top: 2px; }
+    @media print {
+      /* Hide EVERYTHING except the slip */
+      body { background: #fff !important; margin: 0; padding: 0; }
+      header,
+      .summary-bar,
+      .ad-banner,
+      footer,
+      .steps-row,
+      .no-print { display: none !important; }
+
+      /* Hide ALL cards by default */
+      .container > .card,
+      .container > div:not(#preview-section) { display: none !important; }
+
+      /* Show only the preview wrapper */
+      #preview-section { display: block !important; }
+      #preview-section > .card {
+        display: block !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+      }
+      #preview-section h2 { display: none !important; }
+
+      /* Slip itself — full natural flow so multi-page works */
+      #slip {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 12px 16px !important;
+        font-size: 11pt !important;
+        page-break-inside: auto;
+      }
+      .slip-company-name { font-size: 14pt !important; }
+      .slip-earn-ded { page-break-inside: avoid; }
+      .slip-net       { page-break-inside: avoid; }
+      .slip-footer    { page-break-inside: avoid; }
+
+      /* Force black ink on coloured backgrounds */
+      .slip-col-title  { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .slip-net        { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .slip-title      { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .slip-row-total  { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+      @page { margin: 12mm; size: A4 portrait; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookieBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#1e293b; color:#e2e8f0; padding:14px 20px; z-index:9999; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:0.82rem; box-shadow:0 -4px 16px rgba(0,0,0,0.25);">
+  <span>🍪 We use cookies to serve ads via Google AdSense. By continuing to use this site, you agree to our
+    <a href="#privacy-policy" style="color:#818cf8; text-decoration:underline;">Privacy Policy</a>.
+  </span>
+  <button onclick="document.getElementById('cookieBanner').style.display='none'; localStorage.setItem('cookieOK','1');"
+    style="background:#4f46e5; color:#fff; border:none; padding:8px 20px; border-radius:7px; font-weight:700; cursor:pointer; font-size:0.82rem; white-space:nowrap;">
+    Got it ✓
+  </button>
+</div>
+<script>
+  // Show cookie banner only if not already accepted
+  if (!localStorage.getItem('cookieOK')) {
+    document.getElementById('cookieBanner').style.display = 'flex';
+  }
+</script>
+
+<header>
+  <h1>Indian Salary Slip Generator</h1>
+  <p>Free &nbsp;|&nbsp; Instant PDF &nbsp;|&nbsp; PF · ESI · HRA · TDS Auto-Calculated &nbsp;|&nbsp; No Signup Required</p>
+</header>
+
+<!-- LIVE SUMMARY BAR -->
+<div class="summary-bar" id="summaryBar">
+  <div class="summary-inner">
+    <div class="summary-item gross">
+      <div class="s-label">Gross Earnings</div>
+      <div class="s-value" id="summaryGross">₹ 0</div>
+    </div>
+    <div class="summary-item deductions">
+      <div class="s-label">Total Deductions</div>
+      <div class="s-value" id="summaryDed">₹ 0</div>
+    </div>
+    <div class="summary-item net">
+      <div class="s-label">Net Pay (Take Home)</div>
+      <div class="s-value" id="summaryNet">₹ 0</div>
+    </div>
+  </div>
+</div>
+
+<!-- AD TOP: Replace ca-pub-5972873196464435 with your Publisher ID -->
+<div class="container">
+  <div class="ad-banner no-print">
+    <!-- AdSense unit 1 — Horizontal banner -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-5972873196464435"
+         data-ad-slot="1111111111"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- STEP INDICATOR -->
+  <div class="steps-row no-print">
+    <div class="step active"><div class="step-num">1</div><span>Company</span></div>
+    <div class="step-divider"></div>
+    <div class="step active"><div class="step-num">2</div><span>Employee</span></div>
+    <div class="step-divider"></div>
+    <div class="step active"><div class="step-num">3</div><span>Earnings</span></div>
+    <div class="step-divider"></div>
+    <div class="step active"><div class="step-num">4</div><span>Tax &amp; Deductions</span></div>
+    <div class="step-divider"></div>
+    <div class="step active"><div class="step-num">5</div><span>Generate</span></div>
+  </div>
+
+  <!-- COMPANY DETAILS -->
+  <div class="card">
+    <h2>🏢 Company Details</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Company Name *</label><input type="text" id="companyName" placeholder="e.g. Tata Consultancy Services Ltd" /></div>
+      <div class="form-group"><label>Company Address</label><input type="text" id="companyAddr" placeholder="e.g. 123 MG Road, Bengaluru – 560001" /></div>
+      <div class="form-group"><label>Pay Period / Month *</label>
+        <select id="payMonth">
+          <option value="">Select Month</option>
+          <option selected>April 2026</option><option>March 2026</option><option>February 2026</option>
+          <option>January 2026</option><option>December 2025</option><option>November 2025</option>
+          <option>October 2025</option><option>September 2025</option><option>August 2025</option>
+          <option>July 2025</option><option>June 2025</option><option>May 2025</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Working Days in Month</label><input type="number" id="workingDays" value="26" min="1" max="31" /></div>
+    </div>
+  </div>
+
+  <!-- EMPLOYEE DETAILS -->
+  <div class="card">
+    <h2>👤 Employee Details</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Employee Name *</label><input type="text" id="empName" placeholder="e.g. Rajesh Kumar" /></div>
+      <div class="form-group"><label>Employee ID</label><input type="text" id="empId" placeholder="e.g. EMP-1023" /></div>
+      <div class="form-group"><label>Designation</label><input type="text" id="designation" placeholder="e.g. Senior Software Engineer" /></div>
+      <div class="form-group"><label>Department</label><input type="text" id="department" placeholder="e.g. Information Technology" /></div>
+      <div class="form-group"><label>Date of Joining</label><input type="text" id="doj" placeholder="e.g. 01-Jun-2020" /></div>
+      <div class="form-group"><label>PAN Number</label><input type="text" id="pan" placeholder="e.g. ABCDE1234F" maxlength="10" style="text-transform:uppercase" /></div>
+      <div class="form-group"><label>PF Account Number</label><input type="text" id="pfNo" placeholder="e.g. MH/12345/6789" /></div>
+      <div class="form-group"><label>ESI Number</label><input type="text" id="esiNo" placeholder="e.g. 1234567890" /></div>
+      <div class="form-group"><label>Bank Account No.</label><input type="text" id="bankAcc" placeholder="e.g. XXXX XXXX 1234" /></div>
+      <div class="form-group"><label>Bank Name</label><input type="text" id="bankName" placeholder="e.g. State Bank of India" /></div>
+      <div class="form-group"><label>Days Paid</label><input type="number" id="daysPaid" value="26" min="0" max="31" oninput="calculateAll()" /></div>
+      <div class="form-group"><label>Leave Without Pay (LWP)</label><input type="number" id="lwp" value="0" min="0" max="31" oninput="calculateAll()" /></div>
+    </div>
+  </div>
+
+  <!-- EARNINGS -->
+  <div class="card">
+    <h2>💰 Earnings</h2>
+    <table class="salary-table">
+      <thead><tr><th>Component</th><th>Monthly Amount (₹)</th></tr></thead>
+      <tbody>
+        <tr><td><label>Basic Salary *</label></td><td><input type="number" id="basic" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>HRA (House Rent Allowance)</label></td><td><input type="number" id="hra" placeholder="Auto: 40% of Basic" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>DA (Dearness Allowance)</label></td><td><input type="number" id="da" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>TA (Travel Allowance)</label></td><td><input type="number" id="ta" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>Medical Allowance</label></td><td><input type="number" id="medical" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>Special Allowance</label></td><td><input type="number" id="special" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>Other Allowance</label></td><td><input type="number" id="otherEarn" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr class="total-row"><td>Gross Earnings</td><td><input type="text" id="grossEarnings" readonly /></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TAX REGIME -->
+  <div class="card">
+    <h2>🏛️ Tax Regime Selection (FY 2025-26)</h2>
+    <div class="regime-toggle">
+      <button class="regime-btn" id="btnOld" onclick="setRegime('old')">Old Regime</button>
+      <button class="regime-btn active" id="btnNew" onclick="setRegime('new')">New Regime</button>
+    </div>
+    <div id="regimeInfoNew" class="info-box">
+      <strong>New Tax Regime (Default FY 2024-25 onwards):</strong> Standard Deduction ₹75,000. No exemptions/deductions allowed.<br/>
+      Slabs: ₹0–3L = Nil | ₹3–7L = 5% | ₹7–10L = 10% | ₹10–12L = 15% | ₹12–15L = 20% | &gt;₹15L = 30%.<br/>
+      <strong>87A Rebate:</strong> Taxable income ≤ ₹7L → Tax = ₹0.
+    </div>
+    <div id="regimeInfoOld" class="info-box" style="display:none;">
+      <strong>Old Tax Regime:</strong> Standard Deduction ₹50,000 + HRA, LTA, 80C (₹1.5L), 80D, NPS, Home Loan allowed.<br/>
+      Slabs: ₹0–2.5L = Nil | ₹2.5–5L = 5% | ₹5–10L = 20% | &gt;₹10L = 30%.<br/>
+      <strong>87A Rebate:</strong> Taxable income ≤ ₹5L → Tax = ₹0.
+    </div>
+    <div class="form-grid" style="margin-top:14px;">
+      <div class="form-group">
+        <label>Annual CTC / Gross Salary (₹) <span style="font-size:0.68rem;color:#10b981;font-weight:600;">— or auto-fills from Basic below</span></label>
+        <input type="number" id="annualCTC" placeholder="e.g. 600000" oninput="this.dataset.manual='1'; calculateAll()" />
+      </div>
+      <div class="form-group">
+        <label>Monthly TDS / Income Tax (₹)</label>
+        <input type="text" id="autoTDS" readonly style="background:#f0f4f8;font-weight:800;color:#4f46e5;font-size:1rem;" />
+      </div>
+    </div>
+    <!-- TAX COMPUTATION SUMMARY -->
+    <div id="taxSummaryBox" style="display:none;">
+      <table class="tax-summary-table">
+        <tr class="ts-head"><td colspan="2">📊 Tax Computation Summary (FY 2025-26)</td></tr>
+        <tr><td>Annual CTC / Gross Income</td><td id="ts_ctc">—</td></tr>
+        <tr class="ts-sub"><td id="ts_stdLabel">Less: Standard Deduction</td><td id="ts_std">—</td></tr>
+        <tr class="ts-sub" id="ts_exRow" style="display:none;"><td>Less: Exemptions (HRA + LTA)</td><td id="ts_ex">—</td></tr>
+        <tr class="ts-sub" id="ts_viRow" style="display:none;"><td>Less: Chapter VI-A Deductions</td><td id="ts_vi">—</td></tr>
+        <tr class="ts-total"><td>= Net Taxable Income</td><td id="ts_taxable">—</td></tr>
+        <tr><td>Tax on Taxable Income</td><td id="ts_tax">—</td></tr>
+        <tr><td>Add: 4% Health &amp; Education Cess</td><td id="ts_cess">—</td></tr>
+        <tr class="ts-rebate" id="ts_rebateRow" style="display:none;"><td>Less: 87A Rebate</td><td id="ts_rebate">—</td></tr>
+        <tr class="ts-tax"><td>Total Annual Tax Payable</td><td id="ts_annual">—</td></tr>
+        <tr class="ts-net"><td>Monthly TDS (÷ 12)</td><td id="ts_monthly">—</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- EXEMPTIONS (Old Regime) -->
+  <div class="card" id="exemptionsCard">
+    <h2>🧾 Exemptions &amp; Chapter VI-A Deductions <span style="font-size:0.7rem;color:#10b981;font-weight:600;">(Old Regime Only — Auto-Calculated)</span></h2>
+    <div class="info-box blue" style="margin-bottom:14px;">
+      All fields auto-calculate from your salary data. You can override any value. Caps are enforced as per Income Tax Act.
+    </div>
+
+    <!-- HRA EXEMPTION INPUTS -->
+    <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px 16px;margin-bottom:14px;">
+      <div style="font-size:0.78rem;font-weight:700;color:#4f46e5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">HRA Exemption Calculator — Sec 10(13A)</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Monthly Rent Paid (₹) <span style="color:#ef4444">*</span></label>
+          <input type="number" id="rentPaid" placeholder="0 (enter if in rented house)" oninput="calcTDS()" />
+          <div class="calc-info">Leave 0 if staying in own house — HRA exemption will be ₹0</div>
+        </div>
+        <div class="form-group">
+          <label>City Type</label>
+          <select id="metroCity" onchange="calcTDS()">
+            <option value="metro">Metro City (Mumbai, Delhi, Kolkata, Chennai) — 50% of Basic</option>
+            <option value="nonmetro" selected>Non-Metro City — 40% of Basic</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:0.78rem;color:#64748b;background:#eff6ff;border-radius:6px;padding:8px 12px;" id="hraCalcInfo">
+        Enter monthly rent above to see HRA exemption calculation.
+      </div>
+    </div>
+
+    <table class="salary-table">
+      <thead><tr><th>Exemption / Deduction</th><th style="width:200px;">Annual Amount (₹)</th><th style="width:130px;">Section</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <label>HRA Exemption <span class="auto-badge">AUTO</span></label>
+            <div class="calc-info" id="hraCapInfo"></div>
+          </td>
+          <td><input type="number" id="exHRA" placeholder="Auto-calculated" oninput="exHRA.dataset.manual='1'; calcTDS()" /></td>
+          <td style="font-size:0.75rem;color:#4f46e5;font-weight:600;">Sec 10(13A)</td>
+        </tr>
+        <tr>
+          <td><label>LTA – Leave Travel Allowance</label></td>
+          <td><input type="number" id="exLTA" placeholder="0" oninput="calcTDS()" /></td>
+          <td style="font-size:0.75rem;color:#4f46e5;font-weight:600;">Sec 10(5)</td>
+        </tr>
+        <tr>
+          <td>
+            <label>80C – PF + PPF + ELSS + LIC + Tuition <span class="auto-badge">AUTO (from PF)</span></label>
+            <div class="cap-info">Cap: ₹1,50,000</div>
+          </td>
+          <td><input type="number" id="ex80C" placeholder="Auto: Annual PF" oninput="ex80C.dataset.manual='1'; calcTDS()" /></td>
+          <td style="font-size:0.75rem;color:#4f46e5;font-weight:600;">Sec 80C</td>
+        </tr>
+        <tr>
+          <td>
+            <label>80D – Medical Insurance Premium</label>
+            <div class="cap-info">Cap: ₹25,000 self+family / ₹50,000 if parents are senior citizens</div>
+          </td>
+          <td><input type="number" id="ex80D" placeholder="0" oninput="calcTDS()" /></td>
+          <td style="font-size:0.75rem;color:#4f46e5;font-weight:600;">Sec 80D</td>
+        </tr>
+        <tr>
+          <td>
+            <label>80CCD(1B) – NPS Additional</label>
+            <div class="cap-info">Cap: ₹50,000 (over &amp; above 80C)</div>
+          </td>
+          <td><input type="number" id="exNPS" placeholder="0" oninput="calcTDS()" /></td>
+          <td style="font-size:0.75rem;color:#4f46e5;font-weight:600;">Sec 80CCD(1B)</td>
+        </tr>
+        <tr>
+          <td>
+            <label>Home Loan Interest</label>
+            <div class="cap-info">Cap: ₹2,00,000 (self-occupied)</div>
+          </td>
+          <td><input type="number" id="exHL" placeholder="0" oninput="calcTDS()" /></td>
+          <td style="font-size:0.75rem;color:#4f46e5;font-weight:600;">Sec 24(b)</td>
+        </tr>
+        <tr>
+          <td><label>Other – 80E (Education Loan) / 80G (Donations) etc.</label></td>
+          <td><input type="number" id="exOther" placeholder="0" oninput="calcTDS()" /></td>
+          <td style="font-size:0.75rem;color:#4f46e5;font-weight:600;">Various</td>
+        </tr>
+        <tr class="total-row">
+          <td>Total Exemptions + Deductions (Annual)</td>
+          <td><input type="text" id="totalExemptions" readonly /></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DEDUCTIONS -->
+  <div class="card">
+    <h2>➖ Deductions</h2>
+    <div class="check-row">
+      <label><input type="checkbox" id="chkPF" checked onchange="calculateAll()" /> PF (12% of Basic)</label>
+      <label><input type="checkbox" id="chkESI" checked onchange="calculateAll()" /> ESI (0.75% of Gross, if Gross ≤ ₹21,000)</label>
+      <label><input type="checkbox" id="chkPT" checked onchange="calculateAll()" /> Professional Tax</label>
+    </div>
+    <table class="salary-table">
+      <thead><tr><th>Component</th><th>Monthly Amount (₹)</th></tr></thead>
+      <tbody>
+        <tr><td><label>Provident Fund (PF) – 12% of Basic</label></td><td><input type="number" id="pf" placeholder="Auto-calculated" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>ESI – Employee (0.75% of Gross)</label></td><td><input type="number" id="esi" placeholder="Auto-calculated" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>Professional Tax</label></td><td><input type="number" id="pt" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>TDS (Income Tax)</label></td><td><input type="number" id="tds" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>Advance / Loan Recovery</label></td><td><input type="number" id="advance" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr><td><label>Other Deductions</label></td><td><input type="number" id="otherDed" placeholder="0" oninput="calculateAll()" /></td></tr>
+        <tr class="total-row"><td>Total Deductions</td><td><input type="text" id="totalDeductions" readonly /></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LEGAL DISCLAIMER -->
+  <div class="card no-print">
+    <h2>⚖️ Legal Disclaimer</h2>
+    <div class="disclaimer">
+      <strong>Important:</strong> This salary slip is generated for informational and reference purposes only.
+      <ul style="margin: 8px 0 0 18px; line-height:1.9;">
+        <li>This tool does <strong>not constitute legal, financial, or tax advice</strong>.</li>
+        <li>TDS calculations are <strong>estimates only</strong>. Actual tax liability depends on full-year income, investments, and other factors.</li>
+        <li>PF, ESI, and Professional Tax rates are as per current Indian law but <strong>may vary by state or employer</strong>.</li>
+        <li>For legally accepted salary slips (visa, bank loan, court use), get them signed and stamped by your <strong>HR department or employer</strong>.</li>
+        <li>Always consult a <strong>Chartered Accountant (CA)</strong> for accurate tax computation and filing.</li>
+        <li>The tool creator is <strong>not liable</strong> for any financial or legal consequences arising from use of this tool.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- GENERATE BUTTONS -->
+  <div class="btn-row no-print">
+    <button class="btn btn-primary" onclick="generateSlip()">📄 Generate Salary Slip</button>
+    <button class="btn btn-secondary" onclick="clearForm()">🔄 Clear Form</button>
+  </div>
+
+  <!-- AD MIDDLE -->
+  <div class="ad-banner no-print">
+    <!-- AdSense unit 2 — In-article -->
+    <ins class="adsbygoogle"
+         style="display:block; text-align:center;"
+         data-ad-layout="in-article"
+         data-ad-format="fluid"
+         data-ad-client="ca-pub-5972873196464435"
+         data-ad-slot="2222222222"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- PREVIEW -->
+  <div id="preview-section">
+    <div class="card" style="padding:16px 16px 24px">
+      <h2>📋 Salary Slip Preview</h2>
+      <div id="slip">
+        <!-- Slip content injected by JS -->
+      </div>
+      <div class="btn-row no-print" style="margin-top:20px; justify-content:center;">
+        <button class="btn btn-success" onclick="window.print()">🖨️ Download / Print PDF</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('preview-section').style.display='none'">✖ Close Preview</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO USE -->
+  <div class="card no-print">
+    <h2>ℹ️ How to Use</h2>
+    <ol style="margin-left:18px; line-height:2; font-size:0.9rem; color:#444;">
+      <li>Fill in <strong>Company Details</strong> and <strong>Employee Details</strong></li>
+      <li>Enter <strong>Basic Salary</strong> – HRA and PF will auto-calculate</li>
+      <li>Add any other allowances or deductions as needed</li>
+      <li>Click <strong>"Generate Salary Slip"</strong></li>
+      <li>Click <strong>"Download / Print PDF"</strong> → in the print dialog, choose <strong>"Save as PDF"</strong></li>
+    </ol>
+  </div>
+
+  <!-- FAQ / SEO CONTENT -->
+  <div class="card no-print">
+    <h2>❓ Frequently Asked Questions</h2>
+    <div style="line-height:1.9; font-size:0.88rem; color:#444;">
+      <p><strong>Is this tool free?</strong> Yes, completely free. No signup or login required.</p>
+      <p><strong>Is my data saved anywhere?</strong> No. All processing happens in your browser. Nothing is uploaded to any server.</p>
+      <p><strong>What is HRA?</strong> House Rent Allowance. Typically 40% of Basic (non-metro) or 50% (metro cities) as per Indian income tax rules.</p>
+      <p><strong>What is the PF deduction rate?</strong> Employee PF contribution is 12% of Basic Salary as per EPF Act, India.</p>
+      <p><strong>What is ESI?</strong> Employee State Insurance. Employee contributes 0.75% of gross salary. Applicable only if gross ≤ ₹21,000/month.</p>
+      <p><strong>What is Professional Tax?</strong> A state-level tax in India (varies by state). Maximum ₹200/month. Not applicable in all states.</p>
+      <p><strong>Can I use this for court/legal purposes?</strong> This tool generates a standard format slip for reference. For legally binding documents, consult your HR or CA.</p>
+    </div>
+  </div>
+
+  <!-- ABOUT & CONTACT -->
+  <div class="card no-print" id="about">
+    <h2>👋 About This Tool</h2>
+    <div style="line-height:1.9; font-size:0.88rem; color:#444;">
+      <p>The <strong>Indian Salary Slip Generator</strong> is a free, browser-based tool built for Indian employees and HR professionals. It auto-calculates PF (12%), ESI (0.75%), HRA (40%/50%), Professional Tax, and TDS under both Old and New Tax Regimes for FY 2025-26.</p>
+      <p style="margin-top:8px;">All calculations happen <strong>entirely in your browser</strong> — no data is sent to any server, no account required.</p>
+      <p style="margin-top:8px;"><strong>Contact / Feedback:</strong> Found a bug or have a suggestion? Reach us at <a href="mailto:salaryslipgenerator@gmail.com" style="color:#4f46e5;">salaryslipgenerator@gmail.com</a></p>
+    </div>
+  </div>
+
+  <!-- PRIVACY POLICY -->
+  <div class="card no-print" id="privacy-policy">
+    <h2>🔒 Privacy Policy</h2>
+    <div style="line-height:1.9; font-size:0.85rem; color:#444;">
+      <p><strong>Last updated: April 2026</strong></p>
+
+      <p style="margin-top:10px;"><strong>1. Data We Collect</strong><br/>
+      This website does <strong>not collect, store, or transmit</strong> any personal data you enter. All salary calculations are performed locally in your browser. No information is saved on any server.</p>
+
+      <p style="margin-top:10px;"><strong>2. Cookies &amp; Advertising</strong><br/>
+      We use <strong>Google AdSense</strong> to display advertisements. Google may use cookies to serve ads based on your prior visits to this or other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener" style="color:#4f46e5;">Google Ad Settings</a>.</p>
+
+      <p style="margin-top:10px;"><strong>3. Third-Party Services</strong><br/>
+      We use Google Fonts (fonts.googleapis.com) for typography. Google may log requests to serve fonts. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:#4f46e5;">Google's Privacy Policy</a>.</p>
+
+      <p style="margin-top:10px;"><strong>4. No Account Required</strong><br/>
+      This tool does not require registration, login, or any personal information to use.</p>
+
+      <p style="margin-top:10px;"><strong>5. Changes to This Policy</strong><br/>
+      We may update this privacy policy from time to time. Changes will be reflected on this page with an updated date.</p>
+
+      <p style="margin-top:10px;"><strong>6. Contact</strong><br/>
+      For privacy-related questions, contact us at <a href="mailto:salaryslipgenerator@gmail.com" style="color:#4f46e5;">salaryslipgenerator@gmail.com</a></p>
+    </div>
+  </div>
+
+  <!-- AD BOTTOM -->
+  <div class="ad-banner no-print">
+    <!-- AdSense unit 3 — Multiplex / anchor -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-5972873196464435"
+         data-ad-slot="3333333333"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <footer style="text-align:center; font-size:0.78rem; color:#888; padding:16px 0 24px;" class="no-print">
+    <p>© 2026 Indian Salary Slip Generator &nbsp;|&nbsp; Free tool for Indian employees and employers</p>
+    <p style="margin-top:6px;">
+      <a href="#privacy-policy" style="color:#4f46e5; text-decoration:none; margin:0 8px;">Privacy Policy</a> |
+      <a href="#about" style="color:#4f46e5; text-decoration:none; margin:0 8px;">About</a> |
+      <a href="mailto:salaryslipgenerator@gmail.com" style="color:#4f46e5; text-decoration:none; margin:0 8px;">Contact</a>
+    </p>
+    <p style="margin-top:4px;">Disclaimer: This tool is for informational purposes only. Verify deductions with your HR or Chartered Accountant.</p>
+  </footer>
+
+</div><!-- /container -->
+
+<script>
+  // ===== INDIAN CURRENCY FORMAT =====
+  function inr(n) { return '₹ ' + Math.round(n).toLocaleString('en-IN'); }
+  function inrAbs(n) { return '₹ ' + Math.abs(Math.round(n)).toLocaleString('en-IN'); }
+
+  // ===== TAX REGIME =====
+  var currentRegime = 'new';
+  function setRegime(r) {
+    currentRegime = r;
+    document.getElementById('btnOld').classList.toggle('active', r === 'old');
+    document.getElementById('btnNew').classList.toggle('active', r === 'new');
+    document.getElementById('regimeInfoOld').style.display = r === 'old' ? '' : 'none';
+    document.getElementById('regimeInfoNew').style.display = r === 'new' ? '' : 'none';
+    document.getElementById('exemptionsCard').style.display = r === 'old' ? '' : 'none';
+    // Clear manual flags when switching regime
+    document.getElementById('exHRA').dataset.manual = '';
+    document.getElementById('ex80C').dataset.manual = '';
+    calcTDS();
+  }
+
+  function calcTDS() {
+    var annualCTC = parseFloat(document.getElementById('annualCTC').value) || 0;
+    // Auto-derive from monthly gross if annualCTC not entered
+    if (annualCTC <= 0) {
+      var gr = parseFloat(document.getElementById('grossEarnings').value.replace(/[^\d]/g,'')) || 0;
+      if (gr > 0) { annualCTC = gr * 12; document.getElementById('annualCTC').value = annualCTC; }
+    }
+    if (annualCTC <= 0) {
+      document.getElementById('autoTDS').value = '';
+      document.getElementById('tds').value = 0;
+      document.getElementById('taxSummaryBox').style.display = 'none';
+      return; // annualCTC is 0 — nothing to compute
+    }
+
+    var annualTax = 0, taxable = 0, stdDed = 0;
+    var totalEx = 0, totalVI = 0, rawTax = 0, cess = 0, rebate = 0;
+
+    if (currentRegime === 'new') {
+      stdDed  = 75000;
+      taxable = Math.max(annualCTC - stdDed, 0);
+      if      (taxable <= 300000)  rawTax = 0;
+      else if (taxable <= 700000)  rawTax = (taxable - 300000) * 0.05;
+      else if (taxable <= 1000000) rawTax = 20000  + (taxable - 700000)  * 0.10;
+      else if (taxable <= 1200000) rawTax = 50000  + (taxable - 1000000) * 0.15;
+      else if (taxable <= 1500000) rawTax = 80000  + (taxable - 1200000) * 0.20;
+      else                         rawTax = 140000 + (taxable - 1500000) * 0.30;
+      if (taxable <= 700000) { rebate = rawTax; rawTax = 0; }
+
+    } else {
+      // ===== OLD REGIME: AUTO-CALCULATE HRA EXEMPTION =====
+      stdDed = 50000;
+      var annualBasic = v('basic') * 12;
+      var annualHRA   = v('hra')   * 12;
+      var rentPaidMo  = parseFloat(document.getElementById('rentPaid').value) || 0;
+      var isMetro     = document.getElementById('metroCity').value === 'metro';
+      var hraFrac     = isMetro ? 0.50 : 0.40;
+
+      // Triplet Rule (Section 10(13A))
+      var rule1 = annualHRA;                                         // Actual HRA received
+      var rule2 = annualBasic * hraFrac;                             // 50/40% of Basic
+      var rule3 = Math.max((rentPaidMo * 12) - (annualBasic * 0.10), 0); // Rent - 10% Basic
+      var autoHRAEx = rentPaidMo > 0 ? Math.min(rule1, rule2, rule3) : 0;
+      autoHRAEx = Math.round(autoHRAEx);
+
+      // Update HRA info box
+      var infoEl = document.getElementById('hraCalcInfo');
+      if (rentPaidMo > 0) {
+        infoEl.innerHTML = '<strong>Triplet Rule: Min of —</strong><br/>' +
+          '① Actual HRA Received: ' + inr(rule1) + '<br/>' +
+          '② ' + (isMetro?'50':'40') + '% of Annual Basic: ' + inr(rule2) + '<br/>' +
+          '③ Annual Rent − 10% of Basic: ' + inr(rule3) + '<br/>' +
+          '<strong>Exempted: ' + inr(autoHRAEx) + '</strong>';
+      } else {
+        infoEl.textContent = 'Enter Monthly Rent Paid above to auto-calculate HRA exemption.';
+      }
+      if (!document.getElementById('exHRA').dataset.manual) {
+        document.getElementById('exHRA').value = autoHRAEx || '';
+        document.getElementById('hraCapInfo').textContent =
+          autoHRAEx > 0 ? 'Auto-calculated: ' + inr(autoHRAEx) + ' / year' : '';
+      }
+
+      // Auto-populate 80C with annual PF (if not manually set)
+      var annualPF = Math.round(v('basic') * 0.12 * 12);
+      var capped80C = Math.min(annualPF, 150000);
+      if (!document.getElementById('ex80C').dataset.manual) {
+        document.getElementById('ex80C').value = capped80C || '';
+      }
+
+      var hraEx  = Math.min(parseFloat(document.getElementById('exHRA').value) || 0, rule1);
+      var lta    = parseFloat(document.getElementById('exLTA').value)  || 0;
+      var c80C   = Math.min(parseFloat(document.getElementById('ex80C').value) || 0, 150000);
+      var c80D   = Math.min(parseFloat(document.getElementById('ex80D').value) || 0, 25000);
+      var nps    = Math.min(parseFloat(document.getElementById('exNPS').value) || 0, 50000);
+      var hl     = Math.min(parseFloat(document.getElementById('exHL').value)  || 0, 200000);
+      var xOther = parseFloat(document.getElementById('exOther').value) || 0;
+
+      totalEx = hraEx + lta;
+      totalVI = c80C + c80D + nps + hl + xOther;
+      taxable = Math.max(annualCTC - stdDed - totalEx - totalVI, 0);
+
+      // Update total exemptions display
+      document.getElementById('totalExemptions').value = inr(totalEx + totalVI);
+
+      if      (taxable <= 250000)  rawTax = 0;
+      else if (taxable <= 500000)  rawTax = (taxable - 250000) * 0.05;
+      else if (taxable <= 1000000) rawTax = 12500  + (taxable - 500000)  * 0.20;
+      else                         rawTax = 112500 + (taxable - 1000000) * 0.30;
+      if (taxable <= 500000) { rebate = rawTax; rawTax = 0; }
+    }
+
+    cess       = Math.round(rawTax * 0.04);
+    annualTax  = rawTax + cess;
+    var monthlyTDS = Math.round(annualTax / 12);
+
+    document.getElementById('autoTDS').value = monthlyTDS > 0
+      ? inr(monthlyTDS) + ' / month'
+      : '₹ 0 — No Tax (87A Rebate / Below Taxable Limit)';
+    document.getElementById('tds').value = monthlyTDS;
+
+    // ===== TAX SUMMARY BOX =====
+    var box = document.getElementById('taxSummaryBox');
+    box.style.display = '';
+    document.getElementById('ts_ctc').textContent      = inr(annualCTC);
+    document.getElementById('ts_stdLabel').textContent = 'Less: Standard Deduction (' + (currentRegime==='new'?'₹75,000':'₹50,000') + ')';
+    document.getElementById('ts_std').textContent      = '− ' + inr(stdDed);
+    if (currentRegime === 'old') {
+      document.getElementById('ts_exRow').style.display = totalEx  > 0 ? '' : 'none';
+      document.getElementById('ts_viRow').style.display = totalVI  > 0 ? '' : 'none';
+      document.getElementById('ts_ex').textContent      = '− ' + inr(totalEx);
+      document.getElementById('ts_vi').textContent      = '− ' + inr(totalVI);
+    } else {
+      document.getElementById('ts_exRow').style.display = 'none';
+      document.getElementById('ts_viRow').style.display = 'none';
+    }
+    document.getElementById('ts_taxable').textContent  = inr(taxable);
+    document.getElementById('ts_tax').textContent      = inr(rawTax + (rebate > 0 ? rebate : 0));
+    document.getElementById('ts_cess').textContent     = inr(cess);
+    if (rebate > 0) {
+      document.getElementById('ts_rebateRow').style.display = '';
+      document.getElementById('ts_rebate').textContent = '− ' + inr(rebate);
+    } else {
+      document.getElementById('ts_rebateRow').style.display = 'none';
+    }
+    document.getElementById('ts_annual').textContent   = inr(annualTax);
+    document.getElementById('ts_monthly').textContent  = inr(monthlyTDS);
+    // NOTE: calculateAll() is NOT called here — calculateAll() calls calcTDS() and
+    // re-reads tds after we return, so there is no need for recursion.
+  }
+
+  // ===== AUTO-CALCULATE =====
+  function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+  function sv(id, val) { document.getElementById(id).value = val % 1 === 0 ? val : val.toFixed(2); }
+
+  function calculateAll() {
+    const basic = v('basic');
+    const workDays = v('workingDays') || 26;
+    const daysPaid = v('daysPaid');
+    const lwp = v('lwp');
+
+    // Per-day factor
+    const factor = workDays > 0 ? (daysPaid - lwp) / workDays : 1;
+    const clampedFactor = Math.min(Math.max(factor, 0), 1);
+
+    // HRA: auto-fill only if empty or previously auto-filled
+    const hraField = document.getElementById('hra');
+    if (!hraField.dataset.manual || hraField.dataset.manual === 'false') {
+      const autoHRA = Math.round(basic * 0.40);
+      hraField.value = autoHRA || '';
+    }
+
+    const hra   = v('hra');
+    const da    = v('da');
+    const ta    = v('ta');
+    const med   = v('medical');
+    const spl   = v('special');
+    const oth   = v('otherEarn');
+
+    const grossFull = basic + hra + da + ta + med + spl + oth;
+    const gross = Math.round(grossFull * clampedFactor);
+    document.getElementById('grossEarnings').value = inr(gross);
+
+    // PF: 12% of basic (capped at PF wage ceiling ₹15,000 → max ₹1800, but many cos use full basic)
+    const pfField = document.getElementById('pf');
+    const esiField = document.getElementById('esi');
+    const ptField  = document.getElementById('pt');
+
+    if (document.getElementById('chkPF').checked) {
+      const autoPF = Math.round(basic * 0.12);
+      pfField.value = autoPF;
+      pfField.readOnly = true;
+    } else {
+      pfField.value = 0;
+      pfField.readOnly = false;
+    }
+
+    if (document.getElementById('chkESI').checked) {
+      const autoESI = gross <= 21000 ? Math.round(gross * 0.0075) : 0;
+      esiField.value = autoESI;
+      esiField.readOnly = true;
+    } else {
+      esiField.value = 0;
+      esiField.readOnly = false;
+    }
+
+    if (document.getElementById('chkPT').checked) {
+      ptField.value = gross > 15000 ? 200 : (gross > 10000 ? 150 : 0);
+      ptField.readOnly = true;
+    } else {
+      ptField.value = 0;
+      ptField.readOnly = false;
+    }
+
+    const pf  = v('pf');
+    const esi = v('esi');
+    const pt  = v('pt');
+
+    // Auto-derive annualCTC from gross (if not manually set)
+    var ctcField = document.getElementById('annualCTC');
+    if (!ctcField.dataset.manual && gross > 0) {
+      ctcField.value = gross * 12;
+    }
+
+    // Auto-calculate TDS BEFORE reading tds so totalDed includes it
+    if (!window._tdsLock) {
+      window._tdsLock = true;
+      calcTDS();
+      window._tdsLock = false;
+    }
+
+    // Re-read tds AFTER calcTDS() has updated it
+    const tdsUpdated = v('tds');
+    const advUpdated = v('advance');
+    const odedUpdated = v('otherDed');
+    const totalDedFinal = pf + esi + pt + tdsUpdated + advUpdated + odedUpdated;
+    document.getElementById('totalDeductions').value = inr(totalDedFinal);
+
+    // Live summary bar (now uses correct TDS)
+    var netLive = Math.max(gross - totalDedFinal, 0);
+    document.getElementById('summaryGross').textContent = inr(gross);
+    document.getElementById('summaryDed').textContent   = inr(totalDedFinal);
+    document.getElementById('summaryNet').textContent   = inr(netLive);
+  }
+
+  // Mark HRA as manually edited
+  document.getElementById('hra').addEventListener('input', function() {
+    this.dataset.manual = 'true';
+    calculateAll();
+  });
+  document.getElementById('basic').addEventListener('input', function() {
+    document.getElementById('hra').dataset.manual = 'false';
+    document.getElementById('exHRA').dataset.manual = '';
+    document.getElementById('ex80C').dataset.manual = '';
+    document.getElementById('annualCTC').dataset.manual = '';
+    calculateAll();
+  });
+  // annualCTC manual flag is set inline in oninput — no extra listener needed
+
+  // ===== NUMBER TO WORDS (Indian) =====
+  function numToWords(n) {
+    if (n === 0) return 'Zero';
+    const ones = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten',
+      'Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+    const tens = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+    function convert(num) {
+      if (num < 20) return ones[num];
+      if (num < 100) return tens[Math.floor(num/10)] + (num%10 ? ' '+ones[num%10] : '');
+      if (num < 1000) return ones[Math.floor(num/100)]+' Hundred'+(num%100 ? ' '+convert(num%100) : '');
+      if (num < 100000) return convert(Math.floor(num/1000))+' Thousand'+(num%1000 ? ' '+convert(num%1000) : '');
+      if (num < 10000000) return convert(Math.floor(num/100000))+' Lakh'+(num%100000 ? ' '+convert(num%100000) : '');
+      return convert(Math.floor(num/10000000))+' Crore'+(num%10000000 ? ' '+convert(num%10000000) : '');
+    }
+    return convert(Math.round(n)) + ' Rupees Only';
+  }
+
+  // ===== FORMAT ₹ (Indian) =====
+  function fmt(n) { return inr(n); }
+
+  // ===== GENERATE SLIP =====
+  function generateSlip() {
+    // Clear previous errors
+    document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+    document.querySelectorAll('.field-error-msg').forEach(el => el.remove());
+
+    let hasError = false;
+    function markError(id, msg) {
+      const el = document.getElementById(id);
+      el.classList.add('field-error');
+      el.focus();
+      const span = document.createElement('span');
+      span.className = 'field-error-msg';
+      span.textContent = '⚠ ' + msg;
+      el.parentNode.appendChild(span);
+      hasError = true;
+    }
+
+    // Auto-fill defaults for optional fields
+    if (!document.getElementById('companyName').value.trim()) document.getElementById('companyName').value = 'My Company';
+    if (!document.getElementById('empName').value.trim()) document.getElementById('empName').value = 'Employee';
+    if (!document.getElementById('payMonth').value) document.getElementById('payMonth').value = 'April 2026';
+
+    // Validation
+    if (!document.getElementById('basic').value || v('basic') <= 0) { markError('basic', 'Please enter Basic Salary'); }
+    if (hasError) { document.getElementById('basic').scrollIntoView({behavior:'smooth'}); return; }
+
+    calculateAll();
+
+    const basic   = v('basic');
+    const hra     = v('hra');
+    const da      = v('da');
+    const ta      = v('ta');
+    const med     = v('medical');
+    const spl     = v('special');
+    const oth     = v('otherEarn');
+    const workDays = v('workingDays') || 26;
+    const daysPaid = v('daysPaid');
+    const lwp     = v('lwp');
+    const factor  = workDays > 0 ? Math.min(Math.max((daysPaid - lwp) / workDays, 0), 1) : 1;
+
+    const grossFull = basic + hra + da + ta + med + spl + oth;
+    const gross   = Math.round(grossFull * factor);
+    const pf      = v('pf');
+    const esi     = v('esi');
+    const pt      = v('pt');
+    const tds     = v('tds');
+    const adv     = v('advance');
+    const oded    = v('otherDed');
+    const totalDed = pf + esi + pt + tds + adv + oded;
+    const netPay  = gross - totalDed;
+
+    const earningsRows = [
+      { label: 'Basic Salary', amount: basic },
+      { label: 'House Rent Allowance (HRA)', amount: hra },
+      da    ? { label: 'Dearness Allowance (DA)', amount: da } : null,
+      ta    ? { label: 'Travel Allowance (TA)', amount: ta } : null,
+      med   ? { label: 'Medical Allowance', amount: med } : null,
+      spl   ? { label: 'Special Allowance', amount: spl } : null,
+      oth   ? { label: 'Other Allowance', amount: oth } : null,
+    ].filter(Boolean);
+
+    const dedRows = [
+      pf  ? { label: 'Provident Fund (PF)', amount: pf } : null,
+      esi ? { label: 'ESI (Employee)', amount: esi } : null,
+      pt  ? { label: 'Professional Tax', amount: pt } : null,
+      tds ? { label: 'TDS / Income Tax', amount: tds } : null,
+      adv ? { label: 'Advance / Loan Recovery', amount: adv } : null,
+      oded ? { label: 'Other Deductions', amount: oded } : null,
+    ].filter(Boolean);
+
+    // Pad rows so both columns have same height
+    while (earningsRows.length < dedRows.length) earningsRows.push(null);
+    while (dedRows.length < earningsRows.length) dedRows.push(null);
+
+    const earnRowsHTML = earningsRows.map(r => r
+      ? `<div class="slip-row"><span>${r.label}</span><span>${fmt(r.amount)}</span></div>`
+      : `<div class="slip-row" style="color:#ccc;"><span>—</span><span>—</span></div>`
+    ).join('');
+
+    const dedRowsHTML = dedRows.map(r => r
+      ? `<div class="slip-row"><span>${r.label}</span><span>${fmt(r.amount)}</span></div>`
+      : `<div class="slip-row" style="color:#ccc;"><span>—</span><span>—</span></div>`
+    ).join('');
+
+    function infoRow(label, val) {
+      if (!val) return '';
+      return `<div class="slip-info-row"><span>${label}</span><span>${val}</span></div>`;
+    }
+
+    document.getElementById('slip').innerHTML = `
+      <div class="slip-header">
+        <div class="slip-company-name">${document.getElementById('companyName').value.trim()}</div>
+        <div class="slip-company-addr">${document.getElementById('companyAddr').value.trim()}</div>
+      </div>
+      <div class="slip-title">SALARY SLIP – ${document.getElementById('payMonth').value}</div>
+
+      <div class="slip-info-grid">
+        ${infoRow('Employee Name', document.getElementById('empName').value.trim())}
+        ${infoRow('Employee ID', document.getElementById('empId').value.trim())}
+        ${infoRow('Designation', document.getElementById('designation').value.trim())}
+        ${infoRow('Department', document.getElementById('department').value.trim())}
+        ${infoRow('Date of Joining', document.getElementById('doj').value.trim())}
+        ${infoRow('PAN Number', document.getElementById('pan').value.trim().toUpperCase())}
+        ${infoRow('PF Account No.', document.getElementById('pfNo').value.trim())}
+        ${infoRow('ESI Number', document.getElementById('esiNo').value.trim())}
+        ${infoRow('Bank Account No.', document.getElementById('bankAcc').value.trim())}
+        ${infoRow('Bank Name', document.getElementById('bankName').value.trim())}
+        ${infoRow('Working Days', workDays)}
+        ${infoRow('Days Paid', daysPaid + (lwp > 0 ? ' (LWP: '+lwp+')' : ''))}
+      </div>
+
+      <div class="slip-earn-ded">
+        <div>
+          <div class="slip-col-title">Earnings</div>
+          ${earnRowsHTML}
+          <div class="slip-row-total"><span>Gross Earnings</span><span>${fmt(gross)}</span></div>
+        </div>
+        <div>
+          <div class="slip-col-title">Deductions</div>
+          ${dedRowsHTML}
+          <div class="slip-row-total"><span>Total Deductions</span><span>${fmt(totalDed)}</span></div>
+        </div>
+      </div>
+
+      <div class="slip-net">
+        <span class="slip-net-label">💵 Net Salary (Take Home)</span>
+        <span class="slip-net-amount">${fmt(netPay)}</span>
+      </div>
+      <div class="slip-words">Amount in Words: <strong>${numToWords(netPay)}</strong></div>
+
+      <div style="margin-top:10px; font-size:0.75rem; background:#f5f5f5; border-radius:4px; padding:8px 12px; color:#555; line-height:1.8;">
+        <strong>Tax Regime:</strong> ${currentRegime === 'new' ? 'New Tax Regime (FY 2025-26) — Std. Ded. ₹75,000' : 'Old Tax Regime (FY 2025-26) — Std. Ded. ₹50,000 + Exemptions'}
+        &nbsp;|&nbsp; <strong>Annual TDS:</strong> ${inr(v('tds') * 12)}
+        &nbsp;|&nbsp; <strong>Monthly TDS:</strong> ${inr(v('tds'))}
+      </div>
+
+      <div style="margin-top:10px; font-size:0.7rem; color:#888; border-top:1px dashed #ccc; padding-top:8px; line-height:1.6;">
+        <strong>Disclaimer:</strong> This is a computer-generated salary slip for reference purposes only. It does not constitute legal or tax advice.
+        TDS figures are estimates. Actual tax liability may vary. Consult your HR or CA for official records.
+        This document is not valid for legal/court proceedings without employer's signature and stamp.
+      </div>
+
+      <div class="slip-footer">
+        <div class="slip-sign">
+          <div class="slip-sign-line"></div>
+          <div>Employee Signature</div>
+        </div>
+        <div style="text-align:center; font-size:0.7rem; color:#aaa; align-self:flex-end;">
+          This is a computer-generated salary slip.<br/>No signature required if generated digitally.
+        </div>
+        <div class="slip-sign">
+          <div class="slip-sign-line"></div>
+          <div>Authorised Signatory</div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('preview-section').style.display = 'block';
+    document.getElementById('preview-section').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ===== CLEAR FORM =====
+  function clearForm() {
+    if (!confirm('Clear all entered data?')) return;
+    document.querySelectorAll('input[type=text], input[type=number]').forEach(el => {
+      if (el.id === 'workingDays' || el.id === 'daysPaid') el.value = 26;
+      else if (el.id === 'lwp') el.value = 0;
+      else el.value = '';
+    });
+    document.getElementById('payMonth').value = 'April 2026';
+    document.getElementById('chkPF').checked = true;
+    document.getElementById('chkESI').checked = true;
+    document.getElementById('chkPT').checked = true;
+    document.getElementById('rentPaid').value = '';
+    document.getElementById('metroCity').value = 'nonmetro';
+    document.getElementById('hraCalcInfo').textContent = 'Enter monthly rent above to see HRA exemption calculation.';
+    document.getElementById('hraCapInfo').textContent = '';
+    document.getElementById('exHRA').dataset.manual = '';
+    document.getElementById('ex80C').dataset.manual = '';
+    document.getElementById('annualCTC').dataset.manual = '';
+    document.getElementById('taxSummaryBox').style.display = 'none';
+    setRegime('new');
+    document.getElementById('preview-section').style.display = 'none';
+  }
+
+  // Init
+  setRegime('new');
+  calculateAll();
+</script>
+</body>
+</html>
