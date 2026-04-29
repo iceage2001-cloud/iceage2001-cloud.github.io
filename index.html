@@ -18,7 +18,19 @@
   <style>
     /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', 'Roboto', Arial, sans-serif; background: #f1f5f9; color: #1e293b; font-size: 15px; line-height: 1.5; }
+    body {
+      font-family: 'Inter', 'Roboto', Arial, sans-serif;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.14) 0 3px, transparent 4px),
+        radial-gradient(circle at 82% 72%, rgba(255,255,255,0.12) 0 2px, transparent 3px),
+        radial-gradient(70% 55% at 16% 84%, rgba(168,85,247,0.28) 0%, transparent 70%),
+        radial-gradient(80% 60% at 88% 12%, rgba(99,102,241,0.26) 0%, transparent 68%),
+        linear-gradient(135deg, #32115f 0%, #4c1d95 45%, #312e81 100%);
+      color: #f8fafc;
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
 
     /* ===== HEADER ===== */
     header {
@@ -121,6 +133,17 @@
       margin-bottom: 18px;
       text-transform: uppercase;
       letter-spacing: 1px;
+    }
+
+    .gratuity-note {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: #475569;
+      line-height: 1.7;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
     }
 
     /* ===== FORM GRID ===== */
@@ -588,6 +611,18 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="info-box orange" style="margin-top:14px;">
+      <strong>Tax Saving Titbits (Quick Tips):</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.8;">
+        <li><strong>80C:</strong> Maximize up to ₹1,50,000 using EPF, PPF, ELSS, life insurance premium, home-loan principal, and children's tuition fee.</li>
+        <li><strong>80D:</strong> Claim health insurance premium up to ₹25,000 (self/family) and additional parent cover as per age rules.</li>
+        <li><strong>NPS 80CCD(1B):</strong> Extra deduction up to ₹50,000 over and above 80C can reduce taxable income meaningfully.</li>
+        <li><strong>Home Loan Interest:</strong> If eligible, claim up to ₹2,00,000 under Section 24(b) for self-occupied property.</li>
+        <li><strong>Plan Early:</strong> Invest monthly instead of year-end lump sum to avoid rushed tax-saving decisions.</li>
+      </ul>
+      <div style="margin-top:8px; font-size:0.74rem;">These are general pointers. Always verify final eligibility and proofs with HR/CA before filing ITR.</div>
+    </div>
   </div>
 
   <!-- DEDUCTIONS -->
@@ -610,6 +645,51 @@
         <tr class="total-row"><td>Total Deductions</td><td><input type="text" id="totalDeductions" readonly /></td></tr>
       </tbody>
     </table>
+
+    <div class="info-box blue" style="margin-top:14px;">
+      <strong>Gratuity Calculator (India):</strong> Formula used is (15 / 26) × Last Drawn Wages × Service.
+      Wages for gratuity typically include Basic + Dearness Allowance (DA). Gratuity is an employer-paid terminal benefit and is not deducted from monthly net salary.
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Employee Type</label>
+        <select id="gratuityEmpType" onchange="calculateAll()">
+          <option value="regular" selected>Regular / Non-Fixed-Term (5-year rule)</option>
+          <option value="fixed">Fixed-Term (1-year rule, pro-rata)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Completed Service (Years)</label>
+        <input type="number" id="gratuityYears" value="5" min="0" step="1" oninput="calculateAll()" />
+      </div>
+      <div class="form-group">
+        <label>Additional Service (Months)</label>
+        <input type="number" id="gratuityMonths" value="0" min="0" max="11" step="1" oninput="calculateAll()" />
+      </div>
+      <div class="form-group">
+        <label>Wage Basis for Gratuity</label>
+        <select id="gratuityWageBasis" onchange="calculateAll()">
+          <option value="basic_da" selected>Basic + DA (recommended)</option>
+          <option value="basic_only">Basic only (custom policy)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Gratuity Eligibility</label>
+        <input type="text" id="gratuityStatus" value="Eligible (5+ years)" readonly />
+      </div>
+      <div class="form-group">
+        <label>Estimated Gratuity (Annual)</label>
+        <input type="text" id="gratuityAnnual" readonly />
+      </div>
+      <div class="form-group">
+        <label>Gratuity Monthly Provision</label>
+        <input type="text" id="gratuityMonthly" readonly />
+      </div>
+    </div>
+    <div class="gratuity-note">
+      Note: Regular employees are generally eligible after 5 years. Fixed-term employees are generally eligible on contract termination after 1 year (pro-rata).
+      For exact payable amount and tax treatment, verify with HR/CA.
+    </div>
   </div>
 
   <!-- LEGAL DISCLAIMER -->
@@ -962,6 +1042,25 @@
     const esi = v('esi');
     const pt  = v('pt');
 
+    // Gratuity estimate (India): (15/26) * Last Drawn Wages * Service
+    const gratuityYears = Math.max(v('gratuityYears'), 0);
+    const gratuityMonthsRaw = Math.max(Math.min(v('gratuityMonths'), 11), 0);
+    const gratuityEmpType = document.getElementById('gratuityEmpType').value;
+    const gratuityWageBasis = document.getElementById('gratuityWageBasis').value;
+    const gratuityWage = gratuityWageBasis === 'basic_da' ? (basic + da) : basic;
+    const totalServiceYears = gratuityYears + (gratuityMonthsRaw / 12);
+    const serviceYearsForFormula = gratuityEmpType === 'fixed'
+      ? totalServiceYears
+      : gratuityYears + (gratuityMonthsRaw >= 6 ? 1 : 0);
+    const gratuityEligible = gratuityEmpType === 'fixed' ? totalServiceYears >= 1 : totalServiceYears >= 5;
+    const gratuityAnnual = gratuityEligible ? Math.round((15 / 26) * gratuityWage * serviceYearsForFormula) : 0;
+    const gratuityMonthly = Math.round(gratuityAnnual / 12);
+    document.getElementById('gratuityStatus').value = gratuityEligible
+      ? (gratuityEmpType === 'fixed' ? 'Eligible (Fixed-Term: 1+ year)' : 'Eligible (Regular: 5+ years)')
+      : (gratuityEmpType === 'fixed' ? 'Not Eligible (<1 year)' : 'Not Eligible (<5 years)');
+    document.getElementById('gratuityAnnual').value = gratuityAnnual > 0 ? inr(gratuityAnnual) : '₹ 0';
+    document.getElementById('gratuityMonthly').value = gratuityAnnual > 0 ? inr(gratuityMonthly) : '₹ 0';
+
     // Auto-derive annualCTC from gross (if not manually set)
     var ctcField = document.getElementById('annualCTC');
     if (!ctcField.dataset.manual && gross > 0) {
@@ -1072,6 +1171,17 @@
     const tds     = v('tds');
     const adv     = v('advance');
     const oded    = v('otherDed');
+    const gratuityYears = Math.max(v('gratuityYears'), 0);
+    const gratuityMonthsRaw = Math.max(Math.min(v('gratuityMonths'), 11), 0);
+    const gratuityEmpType = document.getElementById('gratuityEmpType').value;
+    const gratuityWageBasis = document.getElementById('gratuityWageBasis').value;
+    const gratuityWage = gratuityWageBasis === 'basic_da' ? (basic + da) : basic;
+    const totalServiceYears = gratuityYears + (gratuityMonthsRaw / 12);
+    const serviceYearsForFormula = gratuityEmpType === 'fixed'
+      ? totalServiceYears
+      : gratuityYears + (gratuityMonthsRaw >= 6 ? 1 : 0);
+    const gratuityEligible = gratuityEmpType === 'fixed' ? totalServiceYears >= 1 : totalServiceYears >= 5;
+    const gratuityAnnual = gratuityEligible ? Math.round((15 / 26) * gratuityWage * serviceYearsForFormula) : 0;
     const totalDed = pf + esi + pt + tds + adv + oded;
     const netPay  = gross - totalDed;
 
@@ -1133,6 +1243,7 @@
         ${infoRow('Bank Name', document.getElementById('bankName').value.trim())}
         ${infoRow('Working Days', workDays)}
         ${infoRow('Days Paid', daysPaid + (lwp > 0 ? ' (LWP: '+lwp+')' : ''))}
+        ${infoRow('Service Years (Gratuity)', gratuityYears + ' years ' + gratuityMonthsRaw + ' months')}
       </div>
 
       <div class="slip-earn-ded">
@@ -1158,6 +1269,8 @@
         <strong>Tax Regime:</strong> ${currentRegime === 'new' ? 'New Tax Regime (FY 2025-26) — Std. Ded. ₹75,000' : 'Old Tax Regime (FY 2025-26) — Std. Ded. ₹50,000 + Exemptions'}
         &nbsp;|&nbsp; <strong>Annual TDS:</strong> ${inr(v('tds') * 12)}
         &nbsp;|&nbsp; <strong>Monthly TDS:</strong> ${inr(v('tds'))}
+        &nbsp;|&nbsp; <strong>Estimated Gratuity:</strong> ${inr(gratuityAnnual)}
+        &nbsp;|&nbsp; <strong>Wage Basis:</strong> ${gratuityWageBasis === 'basic_da' ? 'Basic + DA' : 'Basic only'}
       </div>
 
       <div style="margin-top:10px; font-size:0.7rem; color:#888; border-top:1px dashed #ccc; padding-top:8px; line-height:1.6;">
@@ -1197,6 +1310,13 @@
     document.getElementById('chkPF').checked = true;
     document.getElementById('chkESI').checked = true;
     document.getElementById('chkPT').checked = true;
+    document.getElementById('gratuityEmpType').value = 'regular';
+    document.getElementById('gratuityWageBasis').value = 'basic_da';
+    document.getElementById('gratuityYears').value = 5;
+    document.getElementById('gratuityMonths').value = 0;
+    document.getElementById('gratuityStatus').value = 'Eligible (5+ years)';
+    document.getElementById('gratuityAnnual').value = '';
+    document.getElementById('gratuityMonthly').value = '';
     document.getElementById('rentPaid').value = '';
     document.getElementById('metroCity').value = 'nonmetro';
     document.getElementById('hraCalcInfo').textContent = 'Enter monthly rent above to see HRA exemption calculation.';
